@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nine Men's Morris 98</title>
+    <meta name="description"
+        content="Play Nine Men's Morris against an AI with minimax algorithm in a classic Windows 98 styled interface.">
+    <link rel="alternate" hreflang="pl" href="index.html" />
+    <link rel="alternate" hreflang="en" href="en.html" />
+    <link rel="alternate" hreflang="x-default" href="en.html" />
+    <link rel="stylesheet" href="styles.css?v=2">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div id="layout-wrapper"
+        style="display:flex; flex-direction:column; width:100vw; height:100vh; overflow:hidden; background: #808080;">
+
+        <!-- TOP AD SENSE CONTAINER -->
+        <div id="ad-top-wrapper"
+            style="width:100%; min-height:90px; display:flex; justify-content:center; align-items:center; background: var(--window-bg, #c0c0c0); border-bottom: 2px inset var(--window-bg, #ffffff);">
+            <!-- Paste your AdSense code for the horizontal ad here (e.g. 728x90) -->
+            <div
+                style="color:var(--window-border-dark, #808080); font-family:'MS Sans Serif', sans-serif; border: 1px dashed var(--window-border-dark, #808080); padding: 10px;">
+                AdSense Placement (Top)</div>
+        </div>
+
+        <div id="main-split" style="display:flex; flex:1; width:100%; overflow:hidden;">
+
+            <!-- LEFT AREA: WINDOWS DESKTOP ENVIRONMENT -->
+            <div id="desktop-wrapper"
+                style="flex:1; position:relative; display:flex; flex-direction:column; overflow:hidden;">
+
+                <div id="desktop">
+                    <!-- Desktop Icons -->
+                    <div class="desktop-icons">
+                        <div class="icon" ondblclick="openWindow('game')">
+                            <div class="icon-image"><i class="fas fa-chess"></i></div>
+                            <div class="icon-text">The Game</div>
+                        </div>
+                        <div class="icon" ondblclick="openWindow('about')">
+                            <div class="icon-image"><i class="fas fa-info-circle"></i></div>
+                            <div class="icon-text">About</div>
+                        </div>
+                        <div class="icon" ondblclick="openWindow('calculator')">
+                            <div class="icon-image"><i class="fas fa-calculator"></i></div>
+                            <div class="icon-text">Calculator</div>
+                        </div>
+                        <div class="icon" ondblclick="openWindow('themes')">
+                            <div class="icon-image"><i class="fas fa-palette"></i></div>
+                            <div class="icon-text">Display</div>
+                        </div>
+                    </div>
+
+                    <!-- ===== GAME WINDOW ===== -->
+                    <div class="window" id="game-window" style="width:540px; height:640px; top:20px; left:120px;">
+                        <div class="window-header">
+                            <span class="window-title">Nine Men's Morris</span>
+                            <div class="window-controls">
+                                <button class="window-button" onclick="minimizeWindow('game')">_</button>
+                                <button class="window-button" onclick="maximizeWindow('game')">□</button>
+                                <button class="window-button close-btn" onclick="closeWindow('game')">×</button>
+                            </div>
+                        </div>
+                        <div class="window-content" id="game-content">
+                            <!-- Toolbar -->
+                            <div id="game-toolbar">
+                                <button class="dialog-button" id="new-game-btn" onclick="newGame()">
+                                    <i class="fas fa-redo-alt"></i> New Game
+                                </button>
+                                <span class="toolbar-separator"></span>
+                                <label class="toolbar-label">Difficulty:
+                                    <select id="difficulty-select" class="win98-select">
+                                        <option value="easy">Easy</option>
+                                        <option value="medium" selected>Medium</option>
+                                        <option value="hard">Hard</option>
+                                    </select>
+                                </label>
+                            </div>
+
+                            <!-- Board -->
+                            <div id="board-container">
+                                <svg id="game-board" viewBox="-10 -10 440 440" xmlns="http://www.w3.org/2000/svg">
+                                    <!-- Lines drawn by JS -->
+                                </svg>
+                            </div>
+
+                            <!-- Piece Counters -->
+                            <div id="piece-info">
+                                <div class="player-info" id="white-info">
+                                    <span class="piece-dot white-dot"></span>
+                                    <span>White (You)</span>
+                                    <span class="piece-count">Remaining: <strong id="white-remaining">9</strong></span>
+                                </div>
+                                <div class="player-info" id="black-info">
+                                    <span class="piece-dot black-dot"></span>
+                                    <span>Black (AI)</span>
+                                    <span class="piece-count">Remaining: <strong id="black-remaining">9</strong></span>
+                                </div>
+                            </div>
+
+                            <!-- Status Bar -->
+                            <div id="game-status-bar">
+                                <span id="game-status">Double-click the Game icon to start playing!</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ===== ABOUT WINDOW ===== -->
+                    <div class="window" id="about-window" style="width:400px; height:300px; top:60px; left:60px;">
+                        <div class="window-header">
+                            <span class="window-title">About — Nine Men's Morris</span>
+                            <div class="window-controls">
+                                <button class="window-button" onclick="minimizeWindow('about')">_</button>
+                                <button class="window-button" onclick="maximizeWindow('about')">□</button>
+                                <button class="window-button close-btn" onclick="closeWindow('about')">×</button>
+                            </div>
+                        </div>
+                        <div class="window-content">
+                            <h3>Game Rules</h3>
+                            <p style="margin:8px 0;">A classic strategy board game known since the Roman Empire.</p>
+                            <h4>How to play:</h4>
+                            <ol style="margin:4px 0 8px 16px; line-height:1.6;">
+                                <li><b>Placing phase:</b> Players take turns placing pieces on empty intersections.</li>
+                                <li><b>Moving phase:</b> When all 9 pieces are placed, players move pieces along lines to adjacent spots.</li>
+                                <li><b>Flying phase:</b> When you have only 3 pieces left, you can 'fly' them to any empty spot on the board.</li>
+                            </ol>
+                            <p style="margin:8px 0;"><b>Mills:</b> Form a row of 3 pieces (a Mill) to remove an opponent's piece.</p>
+                            <p><b>Winning:</b> Reduce your opponent to 2 pieces or block all their legal moves.</p>
+                            <hr style="margin:8px 0;">
+                            <p style="font-size:10px; color:#808080;">AI built with Minimax algorithm & Alpha-Beta pruning.</p>
+                        </div>
+                    </div>
+
+                    <!-- ===== CALCULATOR WINDOW ===== -->
+                    <div class="window" id="calculator-window" style="width:220px; height:300px; top:80px; left:300px;">
+                        <div class="window-header">
+                            <span class="window-title">Calculator</span>
+                            <div class="window-controls">
+                                <button class="window-button" onclick="minimizeWindow('calculator')">_</button>
+                                <button class="window-button" onclick="maximizeWindow('calculator')">□</button>
+                                <button class="window-button close-btn" onclick="closeWindow('calculator')">×</button>
+                            </div>
+                        </div>
+                        <div class="window-content" style="padding:4px;">
+                            <input type="text" id="calc-display" value="0" readonly
+                                style="width:100%; text-align:right; font-size:14px; height:28px; margin-bottom:4px;">
+                            <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:2px;">
+                                <button onclick="clearCalc()">C</button>
+                                <button onclick="calcBackspace()">←</button>
+                                <button onclick="calcInput('%')">%</button>
+                                <button onclick="calcInput('/')">÷</button>
+                                <button onclick="calcInput('7')">7</button>
+                                <button onclick="calcInput('8')">8</button>
+                                <button onclick="calcInput('9')">9</button>
+                                <button onclick="calcInput('×')">×</button>
+                                <button onclick="calcInput('4')">4</button>
+                                <button onclick="calcInput('5')">5</button>
+                                <button onclick="calcInput('6')">6</button>
+                                <button onclick="calcInput('-')">-</button>
+                                <button onclick="calcInput('1')">1</button>
+                                <button onclick="calcInput('2')">2</button>
+                                <button onclick="calcInput('3')">3</button>
+                                <button onclick="calcInput('+')">+</button>
+                                <button onclick="calcInput('0')" style="grid-column:span 2;">0</button>
+                                <button onclick="calcInput('.')">.</button>
+                                <button onclick="calcEqual()">=</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ===== THEMES WINDOW ===== -->
+                    <div class="window" id="themes-window" style="width:380px; height:360px; top:100px; left:150px;">
+                        <div class="window-header">
+                            <span class="window-title">Display Properties</span>
+                            <div class="window-controls">
+                                <button class="window-button" onclick="minimizeWindow('themes')">_</button>
+                                <button class="window-button" onclick="maximizeWindow('themes')">□</button>
+                                <button class="window-button close-btn" onclick="closeWindow('themes')">×</button>
+                            </div>
+                        </div>
+                        <div class="window-content">
+                            <h4 style="margin-bottom:8px;">Theme Preview:</h4>
+                            <div style="border:2px inset var(--window-bg); padding:8px; margin-bottom:8px; height:80px; position:relative;"
+                                id="preview-desktop">
+                                <div style="width:120px; height:50px; position:absolute; top:15px; left:50%; transform:translateX(-50%); border:2px outset var(--window-bg);"
+                                    id="preview-window">
+                                    <div style="height:14px; padding:1px 3px; font-size:9px; color:white; font-weight:bold;"
+                                        id="preview-titlebar">Window</div>
+                                    <div style="padding:4px; font-size:9px;" id="preview-content">
+                                        <button style="font-size:8px; padding:1px 4px;" id="preview-button">OK</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:4px;">
+                                <label><input type="radio" name="theme" id="default-theme" value="default" checked
+                                        onchange="previewTheme('default')"> Windows 98 Classic</label>
+                                <label><input type="radio" name="theme" value="pink" onchange="previewTheme('pink')">
+                                    Pastel Pink</label>
+                                <label><input type="radio" name="theme" value="cyberpunk"
+                                        onchange="previewTheme('cyberpunk')"> Cyberpunk</label>
+                                <label><input type="radio" name="theme" value="lilac" onchange="previewTheme('lilac')">
+                                    Lilac</label>
+                                <label><input type="radio" name="theme" value="green" onchange="previewTheme('green')">
+                                    Forest Green</label>
+                            </div>
+                            <div style="margin-top:12px; display:flex; gap:4px; justify-content:flex-end;">
+                                <button class="dialog-button" onclick="applyCurrentTheme()">Apply</button>
+                                <button class="dialog-button" onclick="resetTheme()">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ===== GAME OVER WINDOW ===== -->
+                    <div class="window" id="gameover-window"
+                        style="width:300px; height:140px; top:40%; left:50%; transform:translate(-50%, -40%);">
+                        <div class="window-header">
+                            <span class="window-title">Game Over</span>
+                            <div class="window-controls">
+                                <button class="window-button close-btn" onclick="closeWindow('gameover')">×</button>
+                            </div>
+                        </div>
+                        <div class="window-content" style="text-align:center; padding-top:20px;">
+                            <h4 id="gameover-message" style="margin-bottom:15px;"></h4>
+                            <button class="dialog-button" style="padding:4px 16px;"
+                                onclick="closeWindow('gameover'); newGame();">Play Again</button>
+                            <button class="dialog-button" style="padding:4px 16px; margin-left: 8px;"
+                                onclick="closeWindow('gameover')">Close</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ===== TASKBAR ===== -->
+                <div class="taskbar">
+                    <button class="start-button" onclick="toggleStartMenu()">
+                        <i class="fas fa-window-maximize"></i> <b>Start</b>
+                    </button>
+                    <div class="taskbar-items" id="taskbar-items"></div>
+                    <div class="lang-switch" onclick="window.location.href='index.html'" style="padding: 2px 8px; border: 1px inset var(--button-bg); margin: 1px; font-family: 'MS Sans Serif', sans-serif; font-size: 11px; height: 22px; display: flex; align-items: center; justify-content: center; cursor: pointer;">🇵🇱 PL</div>
+                    <div class="clock" id="clock"></div>
+                </div>
+
+                <!-- ===== START MENU ===== -->
+                <div class="start-menu" id="start-menu">
+                    <div class="start-menu-header"><i class="fas fa-window-maximize"></i> Nine Men's Morris 98</div>
+                    <div class="start-menu-items">
+                        <div class="start-menu-item" onclick="openWindow('game')"><i class="fas fa-chess"></i> Play Game</div>
+                        <div class="start-menu-item" onclick="openWindow('about')"><i class="fas fa-info-circle"></i> About us</div>
+                        <div class="start-menu-separator"></div>
+                        <div class="start-menu-item" onclick="openWindow('calculator')"><i
+                                class="fas fa-calculator"></i> Calculator</div>
+                        <div class="start-menu-item" onclick="openWindow('themes')"><i class="fas fa-palette"></i>
+                            Display Properties</div>
+                        <div class="start-menu-separator"></div>
+                        <div class="start-menu-item" onclick="showShutdownDialog()"><i class="fas fa-power-off"></i>
+                            Shut Down...</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- RIGHT AD SENSE CONTAINER -->
+            <div id="ad-right-wrapper"
+                style="width:300px; display:flex; flex-direction:column; justify-content:center; align-items:center; background: var(--window-bg, #c0c0c0); border-left: 2px inset var(--window-bg, #ffffff); flex-shrink: 0;">
+                <!-- Paste your AdSense code for the vertical ad here (e.g. 300x600 or 300x250) -->
+                <div
+                    style="color:var(--window-border-dark, #808080); font-family:'MS Sans Serif', sans-serif; border: 1px dashed var(--window-border-dark, #808080); padding: 10px; text-align:center;">
+                    AdSense Placement<br>(Right Sidebar)
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- SEO CONTENT -->
+    <div class="seo-wrapper">
+        <section class="seo-content">
+            <h1>Play the Classic Nine Men's Morris Game Online</h1>
+            <p>Welcome to our unique browser-based version of one of the oldest and most classic board games in the world — <strong>Nine Men's Morris</strong> (also known historically as <i>Merels</i> or <i>Młynek</i>). This free-to-play web application perfectly combines the ancient strategical depth of the board game with a magnificent, nostalgic graphical user interface inspired by the classic <i>Windows 98</i> operating system.</p>
+            
+            <h2>What is Nine Men's Morris?</h2>
+            <p>Nine Men's Morris is an abstract strategy game whose origins trace back to the Roman Empire and Ancient Egypt. While the rules are remarkably easy to pick up, mastering the game requires deep tactical foresight and intense logical planning, similar to standard chess or checkers. Our digital iteration is powered by an extremely robust <strong>Minimax algorithm with Alpha-Beta pruning</strong>, providing a competitive, intelligent AI capable of challenging even the most experienced players across 3 distinct difficulty levels.</p>
+            
+            <h3>The Main Phases of the Game:</h3>
+            <ul>
+                <li><strong>Placing Phase:</strong> Both players start the game with nine pieces (or "men"). Players take alternating turns placing a single piece on any vacant intersection point on the board. If a player successfully forms a horizontal or vertical line of three pieces (a "mill"), they get to instantly remove an opponent's piece from the board, provided that piece is not currently part of another mill itself.</li>
+                <li><strong>Moving Phase:</strong> Once all 18 pieces have been played and placed, the mechanics shift. Now, players maneuver their pieces to an adjacent empty point along the drawn lines, trying to continuously build, break, and rebuild mills.</li>
+                <li><strong>Flying Phase:</strong> When an unfortunate player gets reduced to exactly three pieces, they unlock the ability to "fly". Their pieces can now jump to ANY vacant spot on the board, ignoring the adjacent lines. To achieve victory, you must dwindle the AI down to just two pieces or completely block all of their moving options!</li>
+            </ul>
+
+            <h2>Why the Windows 98 and Cyberpunk Aesthetics?</h2>
+            <p>We believe strategy games shouldn't feel boring. We paired the logical gameplay of Nine Men's Morris with a robust, interactive <i>retro Windows 98 styling</i>. Explore the little desktop, play around with the draggable windows, or even double click on the Display Properties icon to completely reskin your experience. From a classic beige look to a dark hacking Cyberpunk neon theme, the choice is entirely yours!</p>
+
+            <p>Enjoy our free classical strategy board game directly in your browser with absolutely no pop-ups, no registration fields, and no annoying installations. Play smartly, outwit the Minimax AI, and claim victory!</p>
+        </section>
+    </div>
+
+    <script src="script.js?v=2"></script>
+    <script src="game.js?v=2"></script>
+</body>
+
+</html>
