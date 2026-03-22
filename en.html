@@ -14,6 +14,26 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4843570850997367"
         crossorigin="anonymous"></script>
+    <script>
+        (function () {
+            var langPref = localStorage.getItem('lang_preference');
+            var currentFile = window.location.pathname.split('/').pop() || 'index.html';
+            if (currentFile === '' || currentFile === '/') currentFile = 'index.html';
+
+            if (!langPref) {
+                var browserLang = navigator.language || navigator.userLanguage;
+                if (browserLang.toLowerCase().indexOf('pl') === 0) {
+                    langPref = 'pl';
+                } else {
+                    langPref = 'en';
+                }
+            }
+
+            if (langPref === 'pl' && currentFile === 'en.html') {
+                window.location.href = 'index.html' + window.location.search;
+            }
+        })();
+    </script>
 </head>
 
 <body>
@@ -239,7 +259,7 @@
                         <i class="fas fa-window-maximize"></i> <b>Start</b>
                     </button>
                     <div class="taskbar-items" id="taskbar-items"></div>
-                    <div class="lang-switch" onclick="window.location.href='index.html'">🇵🇱 PL</div>
+                    <div class="lang-switch" onclick="setLanguage('pl')">🇵🇱 PL</div>
                     <div class="clock" id="clock"></div>
                 </div>
 

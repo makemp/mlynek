@@ -14,6 +14,11 @@ let selectedIcon = null;
 let calcExpression = '';
 let calcDisplay = '0';
 
+function setLanguage(lang) {
+    localStorage.setItem('lang_preference', lang);
+    window.location.href = (lang === 'pl' ? 'index.html' : 'en.html');
+}
+
 function openWindow(windowId) {
     const windowEl = document.getElementById(windowId + '-window');
     if (!windowEl) return;
