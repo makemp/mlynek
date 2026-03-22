@@ -220,8 +220,7 @@
                     </div>
 
                     <!-- ===== GAME OVER WINDOW ===== -->
-                    <div class="window" id="gameover-window"
-                        style="width:300px; height:140px; top:40%; left:50%; transform:translate(-50%, -40%);">
+                    <div class="window" id="gameover-window">
                         <div class="window-header">
                             <span class="window-title">Koniec gry</span>
                             <div class="window-controls">
@@ -230,10 +229,27 @@
                         </div>
                         <div class="window-content" style="text-align:center; padding-top:20px;">
                             <h4 id="gameover-message" style="margin-bottom:15px;"></h4>
-                            <button class="dialog-button" style="padding:4px 16px;"
-                                onclick="closeWindow('gameover'); newGame();">Zagraj Ponownie</button>
-                            <button class="dialog-button" style="padding:4px 16px; margin-left: 8px;"
-                                onclick="closeWindow('gameover')">Zamknij</button>
+                            <div style="display:flex; gap: 8px; justify-content:center; flex-wrap:wrap;">
+                                <button class="dialog-button" onclick="closeWindow('gameover'); newGame();">Zagraj Ponownie</button>
+                                <button class="dialog-button" onclick="closeWindow('gameover')">Zamknij</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ===== COOKIE CONSENT WINDOW ===== -->
+                    <div class="window" id="cookie-window"
+                        style="width:320px; height:auto; top:50%; left:50%; transform:translate(-50%, -50%); display:none; z-index:9999;">
+                        <div class="window-header">
+                            <span class="window-title">Informacja o prywatności</span>
+                        </div>
+                        <div class="window-content" style="padding:15px;">
+                            <div style="display:flex; gap: 15px; align-items: flex-start; margin-bottom: 15px;">
+                                <i class="fas fa-info-circle" style="font-size: 32px; color: var(--active-titlebar-start);"></i>
+                                <p style="font-size: 11px; line-height: 1.4;">Zgodnie z wymogami Google AdSense, informujemy, że ta strona internetowa używa plików cookie (ciasteczek) do personalizacji reklam i analizowania ruchu. <br><br>Czy wyrażasz zgodę na używanie plików cookie?</p>
+                            </div>
+                            <div style="display:flex; justify-content: center;">
+                                <button class="dialog-button" onclick="acceptCookies()">Akceptuję (OK)</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -244,7 +260,7 @@
                         <i class="fas fa-window-maximize"></i> <b>Start</b>
                     </button>
                     <div class="taskbar-items" id="taskbar-items"></div>
-                    <div class="lang-switch" onclick="window.location.href='en.html'" style="padding: 2px 8px; border: 1px inset var(--button-bg); margin: 1px; font-family: 'MS Sans Serif', sans-serif; font-size: 11px; height: 22px; display: flex; align-items: center; justify-content: center; cursor: pointer;">🇬🇧 EN</div>
+                    <div class="lang-switch" onclick="window.location.href='en.html'">🇬🇧 EN</div>
                     <div class="clock" id="clock"></div>
                 </div>
 

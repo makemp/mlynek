@@ -161,6 +161,15 @@ function clearIconSelection() {
     selectedIcon = null;
 }
 
+function acceptCookies() {
+    localStorage.setItem('cookieConsent', 'true');
+    const cookieWin = document.getElementById('cookie-window');
+    if (cookieWin) {
+        cookieWin.style.display = 'none';
+        cookieWin.classList.remove('visible');
+    }
+}
+
 function toggleStartMenu() {
     const startMenu = document.getElementById('start-menu');
     const startButton = document.querySelector('.start-button');
@@ -332,6 +341,16 @@ document.addEventListener('DOMContentLoaded', function () {
     initDragAndDrop();
     updateClock();
     setInterval(updateClock, 1000);
+
+    // Cookie consent check
+    if (!localStorage.getItem('cookieConsent')) {
+        const cookieWin = document.getElementById('cookie-window');
+        if (cookieWin) {
+            cookieWin.style.display = 'block';
+            cookieWin.classList.add('visible');
+            cookieWin.style.zIndex = 9999;
+        }
+    }
 
     setTimeout(() => {
         openWindow('game');
